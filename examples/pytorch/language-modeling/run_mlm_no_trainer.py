@@ -327,7 +327,6 @@ def main():
     column_names = raw_datasets["train"].column_names
     text_column_name = "text" if "text" in column_names else column_names[0]
     
-    print(args.max_seq_length, "*********************")
     if args.max_seq_length is None:
         max_seq_length = tokenizer.model_max_length
         if max_seq_length > 1024:
@@ -362,10 +361,10 @@ def main():
                 # receives the `special_tokens_mask`.
                 return_special_tokens_mask=True,
             )
-
+        
+        tokenized_datasets = dict()
         for key,split in raw_datasets.items():
-            print("***",key,"***")
-            tokenized_datasets = split.map(
+            tokenized_datasets[key] = split.map(
                 tokenize_function,
                 batched=True,
                 num_proc=args.preprocessing_num_workers,
