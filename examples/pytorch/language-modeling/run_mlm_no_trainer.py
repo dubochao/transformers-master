@@ -71,8 +71,12 @@ def parse_args():
         default=None,
         help="The configuration name of the dataset to use (via the datasets library).",
     )
-    data_streaming: Optional[bool] = field(
-         default=False, metadata={"help": "Whether dataset will be streamed or cached in local. For more info refer: https://github.com/huggingface/datasets/pull/2375/files"}
+    
+    parser.add_argument(
+        "--data_streaming",
+        type=Bool,
+        default=False,
+        help="Whether dataset will be streamed or cached in local. For more info refer: https://github.com/huggingface/datasets/pull/2375/files",    
     )
     parser.add_argument(
         "--train_file", type=str, default=None, help="A csv or a json file containing the training data."
