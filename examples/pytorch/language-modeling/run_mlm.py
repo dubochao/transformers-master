@@ -128,6 +128,10 @@ class DataTrainingArguments:
     dataset_config_name: Optional[str] = field(
         default=None, metadata={"help": "The configuration name of the dataset to use (via the datasets library)."}
     )
+    data_streaming: Optional[bool] = field(
+        default=False, metadata={"help": "Whether dataset will be streamed or cached in local. For more info refer: https://github.com/huggingface/datasets/pull/2375/files"}
+    )
+    
     train_file: Optional[str] = field(default=None, metadata={"help": "The input training data file (a text file)."})
     validation_file: Optional[str] = field(
         default=None,
