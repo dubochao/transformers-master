@@ -364,7 +364,7 @@ def main():
             )
 
         for key,split in raw_datasets.items():
-            print(k)
+            print("***",key,"***")
             tokenized_datasets = split.map(
                 tokenize_function,
                 batched=True,
