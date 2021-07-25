@@ -74,7 +74,7 @@ def parse_args():
     
     parser.add_argument(
         "--data_streaming",
-        type=Bool,
+        type=bool,
         default=False,
         help="Whether dataset will be streamed or cached in local. For more info refer: https://github.com/huggingface/datasets/pull/2375/files",    
     )
