@@ -363,14 +363,17 @@ def main():
                 return_special_tokens_mask=True,
             )
 
-        tokenized_datasets = raw_datasets.map(
-            tokenize_function,
-            batched=True,
-            num_proc=args.preprocessing_num_workers,
-            remove_columns=[text_column_name],
-            load_from_cache_file=not args.overwrite_cache,
-            desc="Running tokenizer on dataset line_by_line",
-        )
+        for key,split in raw_datasets.items():
+            print(k)
+            tokenized_datasets = split.map(
+                tokenize_function,
+                batched=True,
+                num_proc=args.preprocessing_num_workers,
+                remove_columns=[text_column_name],
+                load_from_cache_file=not args.overwrite_cache,
+                desc="Running tokenizer on dataset line_by_line",
+            )
+            
     else:
         # Otherwise, we tokenize every text, then concatenate them together before splitting them in smaller parts.
         # We use `return_special_tokens_mask=True` because DataCollatorForLanguageModeling (see below) is more
