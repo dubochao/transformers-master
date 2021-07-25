@@ -529,6 +529,9 @@ def main():
         unwrapped_model = accelerator.unwrap_model(model)
         unwrapped_model.save_pretrained(args.output_dir, save_function=accelerator.save)
 
+def _mp_fn(index):
+    # For xla_spawn (TPUs)
+    main()
 
 if __name__ == "__main__":
     main()
