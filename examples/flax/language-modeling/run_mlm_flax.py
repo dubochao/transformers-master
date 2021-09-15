@@ -156,6 +156,10 @@ class DataTrainingArguments:
     line_by_line: bool = field(
         default=False,
         metadata={"help": "Whether distinct lines of text in the dataset are to be handled as distinct sequences."},
+    ) 
+    initial_step: int = field(
+        default=0,
+        metadata={'help': 'initial step if  model is started from checkpoint or not'}
     )
 
     def __post_init__(self):
@@ -635,7 +639,7 @@ if __name__ == "__main__":
             state, train_metric, dropout_rngs = p_train_step(state, model_inputs, dropout_rngs)
             train_metrics.append(train_metric)
 
-            cur_step = epoch * (num_train_samples // train_batch_size) + step
+            cur_step = epoch * (num_train_samples // train_batch_size) + step +  data_args.initial_step
 
             if cur_step % training_args.logging_steps == 0 and cur_step > 0:
                 # Save metrics
@@ -680,11 +684,13 @@ if __name__ == "__main__":
                     write_eval_metric(summary_writer, eval_metrics, cur_step)
 
             if cur_step % training_args.save_steps == 0 and cur_step > 0:
-                # save checkpoint after each epoch and push checkpoint to the hub
+                # save checkpoint after each epoch
+                ckpt_path = os.path.join(training_args.output_dir, str(cur_step))
+                os.mkdir(ckpt_path)
                 if jax.process_index() == 0:
                     params = jax.device_get(jax.tree_map(lambda x: x[0], state.params))
                     model.save_pretrained(
-                        training_args.output_dir,
+                        ckpt_path,
                         params=params,
                         push_to_hub=training_args.push_to_hub,
                         commit_message=f"Saving weights and logs of step {cur_step}",
